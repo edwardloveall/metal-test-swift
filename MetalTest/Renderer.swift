@@ -11,19 +11,23 @@ class Renderer: NSObject, MTKViewDelegate {
   }
 
   func draw(in view: MTKView) {
-    let clear = MTLClearColor(red: 1.0, green: 0, blue: 0, alpha: 1.0)
-    view.clearColor = clear
-    let commandBuffer = commandQueue?.makeCommandBuffer()
-    commandBuffer?.label = "MyCommand"
-    if let renderPassDescriptor = view.currentRenderPassDescriptor {
-      let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
-      renderEncoder?.label = "MyRenderEncoder"
-      renderEncoder?.endEncoding()
-      if let currentDrawable = view.currentDrawable {
-        commandBuffer?.present(currentDrawable)
-      }
+    guard
+      let currentDrawable = view.currentDrawable,
+      let renderPassDescriptor = view.currentRenderPassDescriptor,
+      let commandBuffer = commandQueue?.makeCommandBuffer(),
+      let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+    else {
+      return
     }
-    commandBuffer?.commit()
+
+    commandBuffer.label = "MyCommand"
+    renderEncoder.label = "MyRenderEncoder"
+
+    view.clearColor = MTLClearColor(red: 1.0, green: 0, blue: 0, alpha: 1.0)
+    renderEncoder.endEncoding()
+
+    commandBuffer.present(currentDrawable)
+    commandBuffer.commit()
   }
 
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
