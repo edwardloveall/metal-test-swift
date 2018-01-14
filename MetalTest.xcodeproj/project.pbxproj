@@ -12,6 +12,7 @@
 		3938A597200A70CC00C4C5D6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3938A595200A70CC00C4C5D6 /* MainMenu.xib */; };
 		3938A5A0200A71FF00C4C5D6 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3938A59F200A71FF00C4C5D6 /* Renderer.swift */; };
 		3938A5A2200A752800C4C5D6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3938A5A1200A752800C4C5D6 /* MainViewController.swift */; };
+		39E6BCEB200BA4A300F8B30B /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 39E6BCEA200BA4A300F8B30B /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,9 @@
 		3938A599200A70CC00C4C5D6 /* MetalTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalTest.entitlements; sourceTree = "<group>"; };
 		3938A59F200A71FF00C4C5D6 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		3938A5A1200A752800C4C5D6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		39E6BCE8200BA30D00F8B30B /* MetalTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalTypes.h; sourceTree = "<group>"; };
+		39E6BCE9200BA3AD00F8B30B /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		39E6BCEA200BA4A300F8B30B /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,9 @@
 				3938A591200A70CC00C4C5D6 /* AppDelegate.swift */,
 				3938A59F200A71FF00C4C5D6 /* Renderer.swift */,
 				3938A5A1200A752800C4C5D6 /* MainViewController.swift */,
+				39E6BCE8200BA30D00F8B30B /* MetalTypes.h */,
+				39E6BCE9200BA3AD00F8B30B /* Bridging-Header.h */,
+				39E6BCEA200BA4A300F8B30B /* Shaders.metal */,
 				3938A593200A70CC00C4C5D6 /* Assets.xcassets */,
 				3938A595200A70CC00C4C5D6 /* MainMenu.xib */,
 				3938A598200A70CC00C4C5D6 /* Info.plist */,
@@ -137,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39E6BCEB200BA4A300F8B30B /* Shaders.metal in Sources */,
 				3938A5A2200A752800C4C5D6 /* MainViewController.swift in Sources */,
 				3938A5A0200A71FF00C4C5D6 /* Renderer.swift in Sources */,
 				3938A592200A70CC00C4C5D6 /* AppDelegate.swift in Sources */,
@@ -275,6 +283,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.edwardloveall.MetalTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalTest/Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -291,6 +300,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.edwardloveall.MetalTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MetalTest/Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
