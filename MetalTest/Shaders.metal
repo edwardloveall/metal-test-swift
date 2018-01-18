@@ -10,7 +10,7 @@ typedef struct {
 
 vertex RasterizerData
 vertexShader(uint vertexID [[vertex_id]],
-             constant Vertex *vertices [[buffer(VertexInputIndexVertices)]],
+             device Vertex *vertices [[buffer(VertexInputIndexVertices)]],
              constant vector_uint2 *viewportSizePointer [[buffer(VertexInputIndexViewportSize)]]) {
   RasterizerData out;
 
