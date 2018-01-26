@@ -12,6 +12,8 @@
 		3938A597200A70CC00C4C5D6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3938A595200A70CC00C4C5D6 /* MainMenu.xib */; };
 		3938A5A0200A71FF00C4C5D6 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3938A59F200A71FF00C4C5D6 /* Renderer.swift */; };
 		3938A5A2200A752800C4C5D6 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3938A5A1200A752800C4C5D6 /* MainViewController.swift */; };
+		39A788C020142AA0009339B1 /* TGAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A788BF20142AA0009339B1 /* TGAImage.swift */; };
+		39E2181A201A794600C3D796 /* Earth.tga in Resources */ = {isa = PBXBuildFile; fileRef = 39E21819201A794600C3D796 /* Earth.tga */; };
 		39E6BCEB200BA4A300F8B30B /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 39E6BCEA200BA4A300F8B30B /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +26,8 @@
 		3938A599200A70CC00C4C5D6 /* MetalTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalTest.entitlements; sourceTree = "<group>"; };
 		3938A59F200A71FF00C4C5D6 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		3938A5A1200A752800C4C5D6 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		39A788BF20142AA0009339B1 /* TGAImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGAImage.swift; sourceTree = "<group>"; };
+		39E21819201A794600C3D796 /* Earth.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Earth.tga; sourceTree = "<group>"; };
 		39E6BCE8200BA30D00F8B30B /* MetalTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalTypes.h; sourceTree = "<group>"; };
 		39E6BCE9200BA3AD00F8B30B /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		39E6BCEA200BA4A300F8B30B /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -59,8 +63,10 @@
 		3938A590200A70CC00C4C5D6 /* MetalTest */ = {
 			isa = PBXGroup;
 			children = (
+				39E21819201A794600C3D796 /* Earth.tga */,
 				3938A591200A70CC00C4C5D6 /* AppDelegate.swift */,
 				3938A59F200A71FF00C4C5D6 /* Renderer.swift */,
+				39A788BF20142AA0009339B1 /* TGAImage.swift */,
 				3938A5A1200A752800C4C5D6 /* MainViewController.swift */,
 				39E6BCE8200BA30D00F8B30B /* MetalTypes.h */,
 				39E6BCE9200BA3AD00F8B30B /* Bridging-Header.h */,
@@ -132,6 +138,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39E2181A201A794600C3D796 /* Earth.tga in Resources */,
 				3938A594200A70CC00C4C5D6 /* Assets.xcassets in Resources */,
 				3938A597200A70CC00C4C5D6 /* MainMenu.xib in Resources */,
 			);
@@ -148,6 +155,7 @@
 				3938A5A2200A752800C4C5D6 /* MainViewController.swift in Sources */,
 				3938A5A0200A71FF00C4C5D6 /* Renderer.swift in Sources */,
 				3938A592200A70CC00C4C5D6 /* AppDelegate.swift in Sources */,
+				39A788C020142AA0009339B1 /* TGAImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

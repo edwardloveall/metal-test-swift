@@ -5,78 +5,70 @@ class Renderer: NSObject, MTKViewDelegate {
   let device: MTLDevice
   var pipelineState: MTLRenderPipelineState?
   let commandQueue: MTLCommandQueue
-  var viewportSize = vector_uint2(0, 0)
+  let texture: MTLTexture
   var vertexBuffer: MTLBuffer?
   var vertexCount: NSInteger = 0
+  var viewportSize = vector_uint2(0, 0)
 
   init(mtkView: MTKView) {
     guard
-      let _device = mtkView.device,
-      let _queue = _device.makeCommandQueue()
+      let device = mtkView.device,
+      let queue = device.makeCommandQueue()
     else {
       fatalError("could not set up metal")
     }
-    device = _device
-    commandQueue = _queue
+    self.device = device
+    self.commandQueue = queue
+    guard
+      let imageLocation = Bundle.main.url(forResource: "Earth", withExtension: "tga"),
+      let image = TGAImage(location: imageLocation)
+    else {
+      fatalError("An valid Image.tga file is needed to load into a texture")
+    }
+    let textureDescriptor = MTLTextureDescriptor()
+    textureDescriptor.pixelFormat = .bgra8Unorm
+    textureDescriptor.width = image.width
+    textureDescriptor.height = image.height
+
+    guard
+      let texture = device.makeTexture(descriptor: textureDescriptor)
+    else {
+      fatalError("Could not make a texture from the MTLTextureDescriptor")
+    }
+    self.texture = texture
+    let bytesPerRow = MemoryLayout<UInt32>.size * image.width
+    let origin = MTLOrigin(x: 0, y: 0, z: 0)
+    let size = MTLSize(width: image.width, height: image.height, depth: 1)
+    let region = MTLRegion(origin: origin, size: size)
+    var pixelData = image.normalizedData()
+
+    texture.replace(region: region,
+                    mipmapLevel: 0,
+                    withBytes: &pixelData,
+                    bytesPerRow: bytesPerRow)
     super.init()
     self.loadMetal(mtkView: mtkView)
   }
 
-  func generatedVertexData() -> NSMutableData {
-    let quadVertices: [Vertex] = [
-      Vertex(position: vector_float2(-20, 20), color: vector_float4(1, 0, 0, 1)),
-      Vertex(position: vector_float2(20, 20), color: vector_float4(0, 0, 1, 1)),
-      Vertex(position: vector_float2(-20, -20), color: vector_float4(0, 1, 0, 1)),
-      Vertex(position: vector_float2(20, -20), color: vector_float4(1, 0, 0, 1)),
-      Vertex(position: vector_float2(-20, -20), color: vector_float4(0, 1, 0, 1)),
-      Vertex(position: vector_float2(20, 20), color: vector_float4(0, 0, 1, 1)),
-    ]
-    let columns: NSInteger = 25
-    let rows: NSInteger = 15
-    let vertsPerQuad: NSInteger = quadVertices.count
-    let quadSpacing: Float = 50.0
-    let vertexSize = MemoryLayout<Vertex>.size
-
-    let dataSize = vertexSize * vertsPerQuad * columns * rows
-    guard
-      let vertexData = NSMutableData(capacity: dataSize)
-    else {
-      fatalError("could not create data container")
-    }
-
-    for row in (0..<rows) {
-      for column in (0..<columns) {
-        let quadOffset = quadSpacing / 2.0
-        let columnStart = Float(-columns) / 2.0
-        let rowStart = Float(-rows) / 2.0
-        let x = (columnStart + Float(column)) * quadSpacing + quadOffset
-        let y = (rowStart + Float(row)) * quadSpacing + quadOffset
-        let upperLeftPosition = vector_float2(x, y)
-
-        for quadVertex in quadVertices {
-          let newPosition = quadVertex.position + upperLeftPosition
-          var vertex = Vertex(position: newPosition, color: quadVertex.color)
-
-          vertexData.append(&vertex, length: vertexSize)
-        }
-      }
-    }
-    return vertexData
-  }
-
   func loadMetal(mtkView: MTKView) {
-    mtkView.colorPixelFormat = .bgra8Unorm_srgb
+    let vertexData = generatedVertexData()
+    vertexBuffer = device.makeBuffer(
+      bytes: vertexData.bytes,
+      length: vertexData.length,
+      options: .storageModeShared
+    )
+    vertexCount = vertexData.length / MemoryLayout<Vertex>.size
 
     guard
       let defaultLibrary = device.makeDefaultLibrary(),
       let vertexFunction = defaultLibrary.makeFunction(name: "vertexShader"),
-      let fragmentFunction = defaultLibrary.makeFunction(name: "fragmentShader")
+      let fragmentFunction = defaultLibrary.makeFunction(name: "samplingShader")
     else {
       fatalError("could not set up vertex and fragment shaders")
     }
 
     let pipelineDescriptor = MTLRenderPipelineDescriptor()
-    pipelineDescriptor.label = "Simple Pipeline"
+    pipelineDescriptor.label = "Texturing Pipeline"
     pipelineDescriptor.vertexFunction = vertexFunction
     pipelineDescriptor.fragmentFunction = fragmentFunction
     pipelineDescriptor.colorAttachments[0].pixelFormat = mtkView.colorPixelFormat
@@ -86,14 +78,25 @@ class Renderer: NSObject, MTKViewDelegate {
     } catch {
       fatalError("could not create pipeline state")
     }
+  }
 
-    let vertexData = generatedVertexData()
-    vertexBuffer = device.makeBuffer(
-      bytes: vertexData.bytes,
-      length: vertexData.length,
-      options: .storageModeShared
-    )
-    vertexCount = vertexData.length / MemoryLayout<Vertex>.size
+  func generatedVertexData() -> NSMutableData {
+    let quadVertices: [Vertex] = [
+      Vertex(position: vector_float2(250, -250), textureCoordinate: vector_float2(1, 0)),
+      Vertex(position: vector_float2(-250, -250), textureCoordinate: vector_float2(0, 0)),
+      Vertex(position: vector_float2(-250, 250), textureCoordinate: vector_float2(0, 1)),
+      Vertex(position: vector_float2(250, -250), textureCoordinate: vector_float2(1, 0)),
+      Vertex(position: vector_float2(-250, 250), textureCoordinate: vector_float2(0, 1)),
+      Vertex(position: vector_float2(250, 250), textureCoordinate: vector_float2(1, 1))
+    ]
+
+    let vertexData = NSMutableData()
+    let vertexSize = MemoryLayout<Vertex>.size
+    for var vertex in quadVertices {
+      vertexData.append(&vertex, length: vertexSize)
+    }
+
+    return vertexData
   }
 
   func draw(in view: MTKView) {
@@ -110,7 +113,6 @@ class Renderer: NSObject, MTKViewDelegate {
     commandBuffer.label = "MyCommand"
     renderEncoder.label = "MyRenderEncoder"
 
-    view.clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1.0)
     let viewport = MTLViewport(
       originX: 0,
       originY: 0,
@@ -131,6 +133,11 @@ class Renderer: NSObject, MTKViewDelegate {
       &viewportSize,
       length: MemoryLayout.size(ofValue: viewportSize),
       index: Int(VertexInputIndexViewportSize.rawValue)
+    )
+
+    renderEncoder.setFragmentTexture(
+      texture,
+      index: Int(TextureIndexBaseColor.rawValue)
     )
 
     renderEncoder.drawPrimitives(
