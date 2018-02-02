@@ -81,13 +81,16 @@ class Renderer: NSObject, MTKViewDelegate {
   }
 
   func generatedVertexData() -> NSMutableData {
+    let halfWidth = Float(texture.width / 2)
+    let halfHeight = Float(texture.height / 2)
+
     let quadVertices: [Vertex] = [
-      Vertex(position: vector_float2(250, -250), textureCoordinate: vector_float2(1, 0)),
-      Vertex(position: vector_float2(-250, -250), textureCoordinate: vector_float2(0, 0)),
-      Vertex(position: vector_float2(-250, 250), textureCoordinate: vector_float2(0, 1)),
-      Vertex(position: vector_float2(250, -250), textureCoordinate: vector_float2(1, 0)),
-      Vertex(position: vector_float2(-250, 250), textureCoordinate: vector_float2(0, 1)),
-      Vertex(position: vector_float2(250, 250), textureCoordinate: vector_float2(1, 1))
+      Vertex(position: vector_float2(halfWidth, -halfHeight), textureCoordinate: vector_float2(1, 0)),
+      Vertex(position: vector_float2(-halfWidth, -halfHeight), textureCoordinate: vector_float2(0, 0)),
+      Vertex(position: vector_float2(-halfWidth, halfHeight), textureCoordinate: vector_float2(0, 1)),
+      Vertex(position: vector_float2(halfWidth, -halfHeight), textureCoordinate: vector_float2(1, 0)),
+      Vertex(position: vector_float2(-halfWidth, halfHeight), textureCoordinate: vector_float2(0, 1)),
+      Vertex(position: vector_float2(halfWidth, halfHeight), textureCoordinate: vector_float2(1, 1))
     ]
 
     let vertexData = NSMutableData()
